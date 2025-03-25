@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #messages {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            height: 200px;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+        img {
+            margin-top: 10px;
+            max-width: 300px;
+            border: 1px solid #000;
+        }
+        #scannedImages {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        #scannedImages img {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>WebSocket Test</h2>
+    <button onclick="sendMessage('source')">Get Sources</button>
+    <input type="text" id="twainKey" placeholder="Enter Twain Key">
+    <button onclick="sendScan()">Scan</button>
+    <button onclick="stopScan()">Stop</button> <!-- Stop button -->
+
+    <h3>Messages:</h3>
+    <div id="messages"></div>
+
+    <h3>Scanned Images:</h3>
+    <div id="scannedImages"></div> <!-- Container for multiple images -->
+
+    <script>
+        let socket = new WebSocket("ws://localhost:8000/ws/sensors"); // Adjust port if needed
+
+        socket.onopen = function() {
+            logMessage("Connected to WebSocket Server");
+        };
+
+        socket.onmessage = function(event) {
+            logMessage("Server: " + event.data);
+
+            // Check if the received data is binary (either Blob or ArrayBuffer)
+            if (event.data instanceof Blob) {
+                // Create an object URL for the received Blob
+                let imageUrl = URL.createObjectURL(event.data);
+                
+                // Create a new image element for each received image
+                let imageElement = document.createElement("img");
+                imageElement.src = imageUrl;
+                imageElement.style.display = "block";
+                imageElement.alt = "Scanned Image";
+                
+                // Append the image to the container
+                document.getElementById("scannedImages").appendChild(imageElement);
+            } else if (event.data instanceof ArrayBuffer) {
+                // If the data is ArrayBuffer, convert it to Blob and then create an image
+                let blob = new Blob([event.data]);
+                let imageUrl = URL.createObjectURL(blob);
+                
+                // Create a new image element for the ArrayBuffer data
+                let imageElement = document.createElement("img");
+                imageElement.src = imageUrl;
+                imageElement.style.display = "block";
+                imageElement.alt = "Scanned Image";
+                
+                // Append the image to the container
+                document.getElementById("scannedImages").appendChild(imageElement);
+            } else {
+                // Handle text messages (e.g., commands, logs)
+                logMessage(event.data);
+            }
+        };
+
+        socket.onclose = function() {
+            logMessage("Disconnected from WebSocket Server");
+        };
+
+        function sendMessage(message) {
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.send(message);
+                logMessage("You: " + message);
+            } else {
+                logMessage("WebSocket is not connected.");
+            }
+        }
+
+        function sendScan() {
+            let twainKey = document.getElementById("twainKey").value.trim();
+            if (twainKey) {
+                sendMessage("scan/twain/" + twainKey);
+            } else {
+                alert("Please enter a Twain Key");
+            }
+        }
+
+        function stopScan() {
+            sendMessage("stop/");  // Send stop command to the server
+            logMessage("Scan stopped and WebSocket connection closed.");
+        }
+
+        function logMessage(message) {
+            let messagesDiv = document.getElementById("messages");
+            let newMessage = document.createElement("p");
+            newMessage.textContent = message;
+            messagesDiv.appendChild(newMessage);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
