@@ -6,13 +6,14 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.oryx.imaging.Service.ImagingSensorService;
+import com.oryx.imaging.Service.Native.IOSSDK.Driver;
 import com.oryx.imaging.Service.Twain.TwainSensorService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.CopyOnWriteArraySet;
+ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class ImagingSensorWebSocketHandler extends TextWebSocketHandler {
 
@@ -58,9 +59,12 @@ public class ImagingSensorWebSocketHandler extends TextWebSocketHandler {
     }
 
     private void startScanning(String twainKey, WebSocketSession session) {
-        TwainSensorService twainSensorService = new TwainSensorService(twainKey, 3, true, twainKey, 0, 0, false, this);
-        sensor = twainSensorService;
-        twainSensorService.start();
+        // TwainSensorService twainSensorService = new TwainSensorService(twainKey, 3, true, twainKey, 0, 0, false, this);
+        // sensor = twainSensorService;
+        // twainSensorService.start();
+        Driver driver=new Driver(this);
+        sensor = driver;
+        driver.start();
     }
 
     private void stopScanning(WebSocketSession session) {
@@ -111,6 +115,10 @@ public class ImagingSensorWebSocketHandler extends TextWebSocketHandler {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if(this.sensor instanceof Driver){
+            Driver sirona=(Driver) sensor;
+            sirona.imageSavedNotification();
         }
     }
 

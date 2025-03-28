@@ -1,11 +1,8 @@
 package com.oryx.imaging.Sensor;
 
+import com.oryx.imaging.Service.Native.IOSSDK.Filters.*;
+
  
-// import com.oryx.imaging.IOSSDK.Filters.AEFilterParameters;
-// import com.oryx.imaging.IOSSDK.Filters.Filter;
-// import com.oryx.imaging.IOSSDK.Filters.SelectFiltersParameters;
-// import com.oryx.imaging.IOSSDK.Filters.SupremeFilterParameters;
-// import com.oryx.imaging.constant.Strings;
 
 public class Sensor implements Cloneable {
 
@@ -59,33 +56,33 @@ public class Sensor implements Cloneable {
     private String scanDirMac;
     private String scanDirWin;
     private String filterPath;
-    // private AEFilterParameters aeFilter; 
+    private AEFilterParameters aeFilter; 
 
-    // public AEFilterParameters getAeFilter() {
-    //     return aeFilter;
-    // }
+    public AEFilterParameters getAeFilter() {
+        return aeFilter;
+    }
 
-    // public void setAeFilter(AEFilterParameters aeFilter) {
-    //     this.aeFilter = aeFilter;
-    // }
+    public void setAeFilter(AEFilterParameters aeFilter) {
+        this.aeFilter = aeFilter;
+    }
 
-    // public SelectFiltersParameters getEliteFilter() {
-    //     return eliteFilter;
-    // }
+    public SelectFiltersParameters getEliteFilter() {
+        return eliteFilter;
+    }
 
-    // public void setEliteFilter(SelectFiltersParameters eliteFilter) {
-    //     this.eliteFilter = eliteFilter;
-    // }
+    public void setEliteFilter(SelectFiltersParameters eliteFilter) {
+        this.eliteFilter = eliteFilter;
+    }
 
-    // public SupremeFilterParameters get33Filter() {
-    //     return _33Filter;
-    // }
+    public SupremeFilterParameters get33Filter() {
+        return _33Filter;
+    }
 
-    // public void set33Filter(SupremeFilterParameters _33Filter) {
-    //     this._33Filter = _33Filter;
-    // }
-    // private SelectFiltersParameters eliteFilter; 
-    // private SupremeFilterParameters _33Filter; 
+    public void set33Filter(SupremeFilterParameters _33Filter) {
+        this._33Filter = _33Filter;
+    }
+    private SelectFiltersParameters eliteFilter; 
+    private SupremeFilterParameters _33Filter; 
 
  
 
