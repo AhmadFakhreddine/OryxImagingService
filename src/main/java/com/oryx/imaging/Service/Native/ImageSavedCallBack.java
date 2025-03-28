@@ -1,4 +1,4 @@
-package com.oryx.imaging.Service.Native.IOSSDK;
+package com.oryx.imaging.Service.Native;
 
 
 

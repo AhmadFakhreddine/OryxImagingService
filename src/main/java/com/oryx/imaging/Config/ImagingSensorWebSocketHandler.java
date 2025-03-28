@@ -7,6 +7,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.oryx.imaging.Service.ImagingSensorService;
 import com.oryx.imaging.Service.Native.IOSSDK.Driver;
+import com.oryx.imaging.Service.Native.Planmeca.PlanmecaNative;
 import com.oryx.imaging.Service.Twain.TwainSensorService;
 
 import java.io.IOException;
@@ -62,9 +63,16 @@ public class ImagingSensorWebSocketHandler extends TextWebSocketHandler {
         // TwainSensorService twainSensorService = new TwainSensorService(twainKey, 3, true, twainKey, 0, 0, false, this);
         // sensor = twainSensorService;
         // twainSensorService.start();
-        Driver driver=new Driver(this);
-        sensor = driver;
-        driver.start();
+        // Driver driver=new Driver(this);
+        // sensor = driver;
+        // driver.start();
+        PlanmecaNative planmecaNative=new PlanmecaNative(this);
+        sensor=planmecaNative;
+        try {
+            planmecaNative.start();
+        } catch (IOException e) {
+          System.out.println(e.toString());
+        }
     }
 
     private void stopScanning(WebSocketSession session) {

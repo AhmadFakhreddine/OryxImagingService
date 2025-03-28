@@ -5,6 +5,7 @@ package com.oryx.imaging.Service.Native.IOSSDK;
 import com.oryx.imaging.Config.ImagingSensorWebSocketHandler;
 import com.oryx.imaging.Sensor.Sensor;
 import com.oryx.imaging.Service.ImagingSensorService;
+import com.oryx.imaging.Service.Native.ImageSavedCallBack;
 import  com.oryx.imaging.Service.Native.IOSSDK.Filters.AEFilterParameters;
 import com.oryx.imaging.Service.Native.IOSSDK.Filters.Filter;
 import  com.oryx.imaging.Service.Native.IOSSDK.Filters.ImageResource;
